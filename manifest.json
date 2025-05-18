@@ -1,0 +1,10 @@
+{
+    "name": "RepoWebListener",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/PencilFoxStudios/REPOWebListener",
+    "description": "A simple but powerful web listener mod for R.E.P.O.",
+    "dependencies": [
+        "BepInExPack",
+        "REPOLib"
+    ]
+}
