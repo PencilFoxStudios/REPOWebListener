@@ -40,5 +40,5 @@ Any POST request to the endpoint hosted by this mod (``http://localhost:7390?use
 - Spawn a random enemy next to a random player (configurable whitelist)
 ___
 There is much more to come! If you have any suggestions, feel free to reach out to me on [Discord](https://discord.gg/yip)!
-
+<sub>Logo by [N3onAssassin](https://bsky.app/profile/n3onassassin.bsky.social)</sub>
 <sub>© Pencil Fox Studios SP</sub>
