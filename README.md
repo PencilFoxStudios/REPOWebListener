@@ -1,4 +1,4 @@
-![Repo Web Listener Logo, with a Pencil Fox Face](RepoWebListenerBanner.png "Title")
+![Repo Web Listener Logo, with a Pencil Fox Face](https://raw.githubusercontent.com/PencilFoxStudios/REPOWebListener/main/RepoWebListenerBanner.png)
 A highly-customizable mod that lets you integrate anything that supports sending web requests with R.E.P.O!
 
 I originally created this for use with my Twitch streams + MixItUp to make events happen within our multiplayer game whenever someone cheered bits, but I'd imagine it has other use cases. 
