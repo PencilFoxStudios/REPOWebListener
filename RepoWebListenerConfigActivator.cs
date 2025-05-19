@@ -66,15 +66,16 @@ class RepoWebListenerConfigActivator
     public bool GoodEventUpgradeAllMapPlayerCount => goodEventUpgradeAllMapPlayerCount.Value;
     readonly ConfigEntry<bool> goodEventUpgradeSpecificMapPlayerCount;
     public bool GoodEventUpgradeSpecificMapPlayerCount => goodEventUpgradeSpecificMapPlayerCount.Value;
-
     readonly ConfigEntry<bool> goodEventSpawnRandomItem;
     public bool GoodEventSpawnRandomItem => goodEventSpawnRandomItem.Value;
     public Dictionary<string, ConfigEntry<bool>> WhitelistedItems = new Dictionary<string, ConfigEntry<bool>>();
-
     readonly ConfigEntry<bool> goodEventSpawnRandomValuable;
     public bool GoodEventSpawnRandomValuable => goodEventSpawnRandomValuable.Value;
+    readonly ConfigEntry<bool> goodEventReviveSpecific;
+    public bool GoodEventReviveSpecific => goodEventReviveSpecific.Value;
+    readonly ConfigEntry<bool> goodEventReviveAll;
+    public bool GoodEventReviveAll => goodEventReviveAll.Value;
     public Dictionary<string, ConfigEntry<bool>> WhitelistedValuables = new Dictionary<string, ConfigEntry<bool>>();
-
     readonly ConfigEntry<bool> badEventDamageAll;
     public bool BadEventDamageAll => badEventDamageAll.Value;
     readonly ConfigEntry<bool> badEventDamageSpecific;
@@ -83,6 +84,8 @@ class RepoWebListenerConfigActivator
     public int BadEventDamageMinAmount => badEventDamageMinAmount.Value;
     readonly ConfigEntry<int> badEventDamageMaxAmount;
     public int BadEventDamageMaxAmount => badEventDamageMaxAmount.Value;
+    readonly ConfigEntry<bool> badEventDamageCanKill;
+    public bool BadEventDamageCanKill => badEventDamageCanKill.Value;
     readonly ConfigEntry<bool> badEventSpawnRandomEnemy;
     public bool BadEventSpawnRandomEnemy => badEventSpawnRandomEnemy.Value;
     // Dictionary of all enemies
@@ -186,6 +189,26 @@ class RepoWebListenerConfigActivator
             true,
             // Description
             "Should healing a specific player be a possible event?\nSetting this to false will ignore GoodEventHealMaxAmount."
+        );
+        goodEventReviveSpecific = cfg.Bind(
+            // Config section
+            "Good Events.Healing",
+            // Key of this config
+            "GoodEventReviveSpecific",
+            // Default value
+            true,
+            // Description
+            "Should reviving a specific player be a possible event?"
+        );
+        goodEventReviveAll = cfg.Bind(
+            // Config section
+            "Good Events.Healing",
+            // Key of this config
+            "GoodEventReviveAll",
+            // Default value
+            true,
+            // Description
+            "Should reviving all players be a possible event?"
         );
         goodEventHealMinAmount = cfg.Bind(
             // Config section
@@ -457,7 +480,9 @@ class RepoWebListenerConfigActivator
         GoodEventUpgradeAllMapPlayerCount ||
         GoodEventUpgradeSpecificMapPlayerCount ||
         GoodEventSpawnRandomItem ||
-        GoodEventSpawnRandomValuable
+        GoodEventSpawnRandomValuable ||
+        GoodEventReviveSpecific ||
+        GoodEventReviveAll
         );
         if (!shouldKeepGoodEventsEnabled)
         {
@@ -505,6 +530,16 @@ class RepoWebListenerConfigActivator
             25,
             // Description
             "What's the maximum damage I'm allowed to deal per BadEventDamageAll/BadEventDamageSpecific event?\nA random amount between BadEventDamageMinAmount and this value will rolled per player."
+        );
+        badEventDamageCanKill = cfg.Bind(
+            // Config section
+            "Bad Events.Damage",
+            // Key of this config
+            "BadEventDamageCanKill",
+            // Default value
+            false,
+            // Description
+            "Should I be allowed to finish off the player via damage?\n(If true, BadEventDamageAll/BadEventDamageSpecific will only be able to get the player(s) down to 1 health.)"
         );
         // Bad Spawning Events
         badEventSpawnRandomEnemy = cfg.Bind(

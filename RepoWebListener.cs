@@ -268,12 +268,26 @@ public class RepoWebListener : BaseUnityPlugin
         return players;
     }
     
+    public static List<PlayerAvatar> GetDeadPlayers()
+    {
+        List<PlayerAvatar> players = new List<PlayerAvatar>();
+
+        foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+        {
+            if (item.playerHealth.health <= 0)
+            {
+                players.Add(item);
+            }
+        }
+        return players;
+    }
+    
     public static Dictionary<string, string> GetAllowedItems()
     {
         Dictionary<string, string> allowedItems = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (string item in PencilConfig.WhitelistedItems.Keys)
         {
-            if(PencilConfig.WhitelistedItems[item].Value)
+            if (PencilConfig.WhitelistedItems[item].Value)
             {
                 allowedItems.Add(item, ItemPaths[item]);
             }
@@ -376,7 +390,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' energy
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradePlayerEnergy(item.steamID);
                 }
@@ -397,7 +411,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' health
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradePlayerHealth(item.steamID);
                 }
@@ -418,7 +432,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' grab strength
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradePlayerGrabStrength(item.steamID);
                 }
@@ -439,7 +453,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' grab range
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradePlayerGrabRange(item.steamID);
                 }
@@ -460,7 +474,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' extra jump
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradePlayerExtraJump(item.steamID);
                 }
@@ -481,7 +495,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' sprint speed
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradePlayerSprintSpeed(item.steamID);
                 }
@@ -502,7 +516,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' tumble launch
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradePlayerTumbleLaunch(item.steamID);
                 }
@@ -523,7 +537,7 @@ public class RepoWebListener : BaseUnityPlugin
         { // Upgrade all players' map player count
             actions.Add(() =>
             {
-                foreach (PlayerAvatar item in SemiFunc.PlayerGetList())
+                foreach (PlayerAvatar item in GetAlivePlayers())
                 {
                     punManager.UpgradeMapPlayerCount(item.steamID);
                 }
@@ -538,6 +552,36 @@ public class RepoWebListener : BaseUnityPlugin
                 punManager.UpgradeMapPlayerCount(player.steamID);
                 Logger.LogInfo($"Upgraded {player.playerName}");
                 hint = $"<b>{player.playerName}</b> feels more aware of their surroundings!";
+            });
+        }
+
+        if (PencilConfig.GoodEventReviveAll && (GetDeadPlayers().Count > 0))
+        {
+            // Revive all players
+            actions.Add(() =>
+            {
+                foreach (PlayerAvatar item in GetDeadPlayers())
+                {
+                    item.Revive();
+                }
+                Logger.LogInfo($"Revived all players");
+                hint = "Everyone is back in the game!";
+            });
+        }
+
+        if (PencilConfig.GoodEventReviveSpecific && (GetDeadPlayers().Count > 0))
+        { // Revive the player
+            actions.Add(() =>
+            {
+                PlayerAvatar playerToRevive = GetDeadPlayers().FirstOrDefault(x => x.steamID == player.steamID);
+                if (playerToRevive == null)
+                {
+                    Logger.LogWarning($"Player {player.playerName} is not dead. Cannot revive.");
+                    return;
+                }
+                playerToRevive.Revive();
+                Logger.LogInfo($"Revived {playerToRevive.playerName}");
+                hint = $"<b>{playerToRevive.playerName}</b> is back in the game!";
             });
         }
 
@@ -567,6 +611,18 @@ public class RepoWebListener : BaseUnityPlugin
             actions.Add(() =>
             {
                 int amount = random.Next(PencilConfig.BadEventDamageMinAmount, PencilConfig.BadEventDamageMaxAmount);
+                // Don't kill the player if BadEventDamageCanKill is false
+                if (!PencilConfig.BadEventDamageCanKill && player.playerHealth.health - amount < 1)
+                {
+                    if (player.playerHealth.health > 1)
+                    {
+                        amount = player.playerHealth.health - 1;
+                    }
+                    else
+                    {
+                        amount = 0;
+                    }
+                }
                 player.playerHealth.HurtOther(amount, player.playerHealth.transform.position, false, -1);
                 Logger.LogInfo($"Dealt damage to {player.playerName}");
                 hint = $"<b>{player.playerName}</b> got hurt for -<b>{amount} HP</b>!";
@@ -602,7 +658,7 @@ public class RepoWebListener : BaseUnityPlugin
             {
                 string randomEnemy = AllowedEnemies.Keys.ElementAt(random.Next(AllowedEnemies.Count));
                 string path = EnemyPaths[randomEnemy];
-                GameObject enemy = Resources.Load<GameObject>(path);
+                GameObject enemy = PhotonNetwork.InstantiateRoomObject(path, player.transform.position + player.transform.up * 0.2f, Quaternion.identity, 0);
                 EnemySetup enemySetup = ScriptableObject.CreateInstance<EnemySetup>();
                 enemySetup.spawnObjects = [enemy];
                 Enemies.RegisterEnemy(enemySetup);
@@ -725,7 +781,7 @@ public class RepoWebListener : BaseUnityPlugin
                         msg = $"{randomMessage} {hint}",
                         color1 = Color.green,
                         color2 = Color.green,
-                        time = 2f
+                        time = 4f
                     }, new RaiseEventOptions { Receivers = ReceiverGroup.All }, SendOptions.SendReliable);
                 }
                 else
