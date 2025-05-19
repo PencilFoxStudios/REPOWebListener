@@ -1,4 +1,44 @@
-# R.E.P.O. Web Listener
+![Repo Web Listener Logo, with a Pencil Fox Face](RepoWebListenerBanner.png "Title")
 A highly-customizable mod that lets you integrate anything that supports sending web requests with R.E.P.O!
 
-I originally created this for use with my Twitch streams + MixItUp to make events happen within our multiplayer game whenever someone cheer bits, but I'd imagine it has other use cases. Check out the config file it generates for options!
+I originally created this for use with my Twitch streams + MixItUp to make events happen within our multiplayer game whenever someone cheered bits, but I'd imagine it has other use cases. 
+
+Check out the config file it generates for options!
+
+## Trigger
+Any POST request to the endpoint hosted by this mod (``http://localhost:7390?username=<optional_reason_for_event>`` by default) will trigger one of the following events. You can turn each one on or off in the configuration.
+## Events
+### Good
+#### General
+- Heal everyone by a random configurable amount
+- Heal a random player by a random configurable amount
+#### Upgrades
+- Upgrade everyone's stamina
+- Upgrade a specific player's stamina
+- Upgrade everyone's max health
+- Upgrade a specific player's max health
+- Upgrade everyone's grab strength
+- Upgrade a specific player's grab strength
+- Upgrade everyone's grab range
+- Upgrade a specific player's grab range
+- Upgrade everyone's speed
+- Upgrade a specific player's speed
+- Give everyone an extra jump
+- Give a specific player an extra jump
+- Upgrade everyone's tumble launch
+- Upgrade a specific player's tumble launch
+- Upgrade everyone's map player count
+- Upgrade a specific player's map player count
+#### Spawning
+- Spawn a random item next to a random player (configurable whitelist)
+- Spawn a random valueable next to a random player (configurable whitelist)
+### Bad
+#### General
+- Damage everyone by a random configurable amount
+- Damage a random player by a random configurable amount
+#### Spawning
+- Spawn a random enemy next to a random player (configurable whitelist)
+___
+There is much more to come! If you have any suggestions, feel free to reach out to me on [Discord](https://discord.gg/yip)!
+
+<sub>© Pencil Fox Studios SP</sub>

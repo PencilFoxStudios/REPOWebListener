@@ -4,7 +4,7 @@
     "website_url": "https://github.com/PencilFoxStudios/REPOWebListener",
     "description": "A simple but powerful web listener mod for R.E.P.O.",
     "dependencies": [
-        "BepInExPack",
-        "REPOLib"
+        "BepInEx-BepInExPack-5.4.2100",
+        "Zehs-REPOLib-2.1.0"
     ]
 }
