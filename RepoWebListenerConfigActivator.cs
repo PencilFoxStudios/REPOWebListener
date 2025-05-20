@@ -575,6 +575,11 @@ class RepoWebListenerConfigActivator
             badEventSpawnRandomEnemy.Value = false;
             RepoWebListener.Logger.LogWarning("All enemies are disabled. Assuming BadEventSpawnRandomEnemy config entry to false.");
         }
+        else
+        {
+            // If at least one enemy is enabled, we need to make sure that the bad event is enabled
+            badEventSpawnRandomEnemy.Value = true;
+        }
         bool shouldKeepBadEventsEnabled = BadThings && (
             BadEventDamageAll ||
             BadEventDamageSpecific ||

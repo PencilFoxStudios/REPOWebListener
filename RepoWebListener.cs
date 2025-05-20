@@ -34,36 +34,20 @@ public class RepoWebListener : BaseUnityPlugin
     private CancellationTokenSource cts = new CancellationTokenSource();
     Queue<string> chatters = new Queue<string>();
     static System.Random random = new System.Random();
-    static Dictionary<string, string> AllowedItems;
-
-    static Dictionary<string, string> AllowedValuables;
-    static Dictionary<string, string> AllowedEnemies;
+    public static Dictionary<string, string> AllowedItems = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    public static Dictionary<string, string> AllowedValuables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    public static Dictionary<string, EnemySetup> AllowedEnemies = new Dictionary<string, EnemySetup>(StringComparer.OrdinalIgnoreCase);
+    private static Dictionary<string, EnemySetup> enemySetups = new Dictionary<string, EnemySetup>();
     public static NetworkedEvent? NewChatterEvent;
     internal static RepoWebListenerConfigActivator PencilConfig { get; private set; } = null!;
     private void Awake()
     {
         Instance = this;
-
-
         this.gameObject.transform.parent = null;
         this.gameObject.hideFlags = HideFlags.HideAndDontSave;
-
         Patch();
-
-
         PencilConfig = new RepoWebListenerConfigActivator(Config);
-
-
-
-
-
         url = $"http://{PencilConfig.WebServerListenIP}:{PencilConfig.WebServerListenPort}/";
-
-
-
-
-
-
         Logger.LogInfo($"{Info.Metadata.GUID} v{Info.Metadata.Version} has loaded!");
         if (PencilConfig.WebServerEnabled)
         {
@@ -76,19 +60,18 @@ public class RepoWebListener : BaseUnityPlugin
         {
             Logger.LogInfo("Web server is disabled. Check the config file to enable it.");
         }
-
         NewChatterEvent = new NetworkedEvent("NewChatterEvent", HandleChatterEvent);
         // Register the event
         PhotonPeer.RegisterType(typeof(MissionOptions), 100, MissionOptions.Serialize, MissionOptions.Deserialize);
         // Set up the listener to handle requests
-
-
         Task.Run(() => ListenLoop(cts.Token));
         Task.Run(() => GoThroughChatters(cts.Token));
-        AllowedItems = GetAllowedItems();
-        AllowedValuables = GetAllowedValuables();
-        AllowedEnemies = GetAllowedEnemies();
+        // // Set up the initial allowed items, valuables, and enemies
+        // AllowedItems = GetAllowedItems();
+        // AllowedValuables = GetAllowedValuables();
+        // AllowedEnemies = GetAllowedEnemies();
     }
+
     public static readonly Dictionary<string, string> ItemPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "ItemCartMedium", "items/Item Cart Medium" },
@@ -205,13 +188,22 @@ public class RepoWebListener : BaseUnityPlugin
 
     public static readonly Dictionary<string, string> EnemyPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "Beamer", "Enemies/Enemy - Beamer" },
-            { "Duck", "Enemies/Enemy - Duck" },
-            { "Robe", "Enemies/Enemy - Robe" },
-            // { "Bowtie", "Enemies/Enemy - Bowtie" },
-            { "Floater", "Enemies/Enemy - Floater" },
-            // { "Gnome", "Enemies/Enemy - Gnome" },
-            { "Hunter", "Enemies/Enemy - Hunter" }
+            { "Beamer", "Beamer" },
+            { "Duck", "Apex Predator" },
+            { "Robe", "Robe" },
+            { "Bowtie", "Bowtie" },
+            { "Floater", "Floater" },
+            { "Gnome", "Gnome" },
+            { "Hunter", "Hunter" },
+            { "Tumbler", "Chef" },
+            { "Thin Man", "Shadow Child" },
+            { "Slow Mouth", "Spewer" },
+            { "Upscream", "Upscream" },
+            { "Hidden", "Hidden" },
+            { "Bang", "Bang" },
+            { "Head", "Headman" },
+            { "Runner", "Reaper" },
+            { "Slow Walker", "Trudge"}
         };
     private async Task ListenLoop(CancellationToken token)
     {
@@ -267,7 +259,7 @@ public class RepoWebListener : BaseUnityPlugin
         }
         return players;
     }
-    
+
     public static List<PlayerAvatar> GetDeadPlayers()
     {
         List<PlayerAvatar> players = new List<PlayerAvatar>();
@@ -281,7 +273,7 @@ public class RepoWebListener : BaseUnityPlugin
         }
         return players;
     }
-    
+
     public static Dictionary<string, string> GetAllowedItems()
     {
         Dictionary<string, string> allowedItems = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -299,21 +291,36 @@ public class RepoWebListener : BaseUnityPlugin
         Dictionary<string, string> allowedValuables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (string item in PencilConfig.WhitelistedValuables.Keys)
         {
-            if(PencilConfig.WhitelistedValuables[item].Value)
+            if (PencilConfig.WhitelistedValuables[item].Value)
             {
                 allowedValuables.Add(item, ValuablePaths[item]);
             }
         }
         return allowedValuables;
     }
-    public static Dictionary<string, string> GetAllowedEnemies()
+    public static Dictionary<string, EnemySetup> GetAllowedEnemies()
     {
-        Dictionary<string, string> allowedEnemies = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        List<EnemySetup> list =
+        [
+            .. EnemyDirector.instance.enemiesDifficulty1,
+            .. EnemyDirector.instance.enemiesDifficulty2,
+            .. EnemyDirector.instance.enemiesDifficulty3,
+        ];
+        Dictionary<string, EnemySetup> allowedEnemies = new Dictionary<string, EnemySetup>(StringComparer.OrdinalIgnoreCase);
         foreach (string item in PencilConfig.WhitelistedEnemies.Keys)
         {
-            if(PencilConfig.WhitelistedEnemies[item].Value)
+            if (PencilConfig.WhitelistedEnemies[item].Value)
             {
-                allowedEnemies.Add(item, EnemyPaths[item]);
+                EnemySetup enemySetup = list.FirstOrDefault(x => x.name == $"Enemy - {item}");
+                if (enemySetup != null)
+                {
+                    // Logger.LogInfo($"Registering enemy {item}");
+                    allowedEnemies.Add(item, enemySetup);
+                }
+                else
+                {
+                    Logger.LogError($"Enemy {item} not found. Cannot add to allowed enemies.");
+                }
             }
         }
         return allowedEnemies;
@@ -627,7 +634,7 @@ public class RepoWebListener : BaseUnityPlugin
                 Logger.LogInfo($"Dealt damage to {player.playerName}");
                 hint = $"<b>{player.playerName}</b> got hurt for -<b>{amount} HP</b>!";
             });
-            
+
         }
 
         if (PencilConfig.BadEventDamageAll)
@@ -644,6 +651,17 @@ public class RepoWebListener : BaseUnityPlugin
                         mostDamage = amount;
                         playerWithMostDamage = item;
                     }
+                    if (!PencilConfig.BadEventDamageCanKill && item.playerHealth.health - amount < 1)
+                    {
+                        if (item.playerHealth.health > 1)
+                        {
+                            amount = item.playerHealth.health - 1;
+                        }
+                        else
+                        {
+                            amount = 0;
+                        }
+                    }
                     item.playerHealth.HurtOther(amount, item.playerHealth.transform.position, false, -1);
                 }
                 Logger.LogInfo($"Dealt damage to all players");
@@ -657,11 +675,13 @@ public class RepoWebListener : BaseUnityPlugin
             actions.Add(() =>
             {
                 string randomEnemy = AllowedEnemies.Keys.ElementAt(random.Next(AllowedEnemies.Count));
-                string path = EnemyPaths[randomEnemy];
-                GameObject enemy = PhotonNetwork.InstantiateRoomObject(path, player.transform.position + player.transform.up * 0.2f, Quaternion.identity, 0);
-                EnemySetup enemySetup = ScriptableObject.CreateInstance<EnemySetup>();
-                enemySetup.spawnObjects = [enemy];
-                Enemies.RegisterEnemy(enemySetup);
+                EnemySetup enemySetup = AllowedEnemies[randomEnemy];
+                if (enemySetup == null)
+                {
+                    Logger.LogError($"Enemy {randomEnemy} not found. Cannot spawn.");
+                    hint = $"Error spawning enemy. {randomEnemy} not found.";
+                    return;
+                }
                 Enemies.SpawnEnemy(enemySetup, player.transform.position + player.transform.up * 0.2f, Quaternion.identity, false);
                 Logger.LogInfo($"Spawned enemy: {randomEnemy}");
                 hint = $"<b>{player.playerName}</b> should watch their back!";
