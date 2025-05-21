@@ -14,8 +14,8 @@ internal class RunManagerPatch
         RepoWebListener.AllowedValuables.Clear();
         RepoWebListener.AllowedEnemies.Clear();
         // Set up the allowed items, valuables, and enemies
-        RepoWebListener.AllowedItems = RepoWebListener.GetAllowedItems();
-        RepoWebListener.AllowedValuables = RepoWebListener.GetAllowedValuables();
-        RepoWebListener.AllowedEnemies = RepoWebListener.GetAllowedEnemies();
+        RepoWebListener.AllowedItems = PencilUtils.GetAllowedItems();
+        RepoWebListener.AllowedValuables = PencilUtils.GetAllowedValuables();
+        RepoWebListener.AllowedEnemies = PencilUtils.GetAllowedEnemies();
     }
 }

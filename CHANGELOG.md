@@ -1,5 +1,16 @@
 # Changelog
 
+## B1.0.6 (5/21/2025)
+- **New Feature**: The plugin will now respond to the GET requests with a message indicating that the event was triggered, as well as the event that was triggered. This would be useful for chatbots and other integrations that want to know what event was triggered.
+- **New Config Option**: Added `Events.General.MinimumTimeBetweenEvents` option to allow the user to set a minimum time between events. This is useful for preventing run-ending spam. The hard-coded minimum is 3 seconds, because I don't want semiwork to get sad.
+- **Tweak**: Changed the way event messages are generated, and added a few more messages. The messages are now more unique and varied, and should be more fun to read. Let me know if you have any suggestions for more messages!
+- **Tweak**: Changed the way items are spawned.
+- **Tweak**: Changed the way valuables are spawned.
+- **Fix**: Fixed a group of bugs that would cause the game to keep the ``Events.General.GoodEvents`` and ``Events.General.BadEvents`` at ``false``, even if there existed respective events that were set to ``true``. 
+- **Fix**: Fixed a bug with the revive events that would try to revive players that were already alive. This would cause the game to raise a warning and not revive anyone.
+- **Housekeeping**: Refactored the dictionaries used to store valueables, items, and enemies into their own file. This should make it easier to add new items and enemies in the future.
+- **Housekeeping**: Refactored the event logic into its own file. This should make it easier to add new events in the future.
+
 ## B1.0.5 (5/20/2025)
 
 - **Feature**: Included the rest of R.E.P.O.'s enemies in the list of possible enemies to spawn (and their respective configs). If a certain enemy causes issues, it may be temporarily removed until a fix is found.

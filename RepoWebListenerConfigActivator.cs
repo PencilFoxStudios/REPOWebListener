@@ -24,6 +24,9 @@ class RepoWebListenerConfigActivator
     readonly ConfigEntry<bool> goodThings;
     public bool GoodThings => goodThings.Value;
 
+    readonly ConfigEntry<int> minimumTimeBetweenEvents;
+    public int MinimumTimeBetweenEvents => minimumTimeBetweenEvents.Value;
+
     readonly ConfigEntry<bool> badThings;
     public bool BadThings => badThings.Value;
     readonly ConfigEntry<bool> goodEventHealAll;
@@ -144,6 +147,24 @@ class RepoWebListenerConfigActivator
             // Description
             "Should I send events when you're in the arena level?"
         );
+        // Events.General.MinimumTimeBetweenEvents 
+        // Minimum time between events
+        minimumTimeBetweenEvents = cfg.Bind(
+            // Config section
+            "Events.General",
+            // Key of this config
+            "MinimumTimeBetweenEvents",
+            // Default value
+            10,
+            // Description
+            "How long should I wait between events in the queue?\nThis is in seconds, and has a hard-coded minimum of 3 seconds."
+        );
+        if (minimumTimeBetweenEvents.Value < 3)
+        {
+            RepoWebListener.Logger.LogWarning("To avoid spamming the multiplayer servers, the minimum time between events must be at least 3 seconds. Setting to 3.");
+            minimumTimeBetweenEvents.Value = 3;
+        }
+
 
 
         // Good Things
@@ -403,7 +424,7 @@ class RepoWebListenerConfigActivator
             "Should spawning a random item near a random player be a possible event?\nSetting this to false will ignore all below events starting with GoodEventSpawnItem"
         );
         bool atLeastOneItemInWhitelist = false;
-        foreach (var pair in RepoWebListener.ItemPaths)
+        foreach (var pair in Dictionaries.ItemPaths)
         {
             WhitelistedItems[pair.Key] = cfg.Bind(
                 // Config section
@@ -438,7 +459,7 @@ class RepoWebListenerConfigActivator
         );
 
         bool atLeastOneValuableInWhitelist = false;
-        foreach (var pair in RepoWebListener.ValuablePaths)
+        foreach (var pair in Dictionaries.ValuablePaths)
         {
             WhitelistedValuables[pair.Key] = cfg.Bind(
                 // Config section
@@ -488,6 +509,11 @@ class RepoWebListenerConfigActivator
         {
             goodThings.Value = false;
             RepoWebListener.Logger.LogWarning("All good events are disabled. Assuming GoodThings config entry to false.");
+        }
+        else
+        {
+            // If at least one good event is enabled, we need to make sure that the good event is enabled
+            goodThings.Value = true;
         }
 
         // Bad Events
@@ -553,7 +579,7 @@ class RepoWebListenerConfigActivator
             "Should spawning a random enemy near a random player be a possible event?\nSetting this to false will ignore all below events starting with BadEventSpawnEnemy."
         );
         bool atLeastOneEnemyInWhitelist = false;
-        foreach (var pair in RepoWebListener.EnemyPaths)
+        foreach (var pair in Dictionaries.EnemyPaths)
         {
             WhitelistedEnemies[pair.Key] = cfg.Bind(
                 // Config section
@@ -589,6 +615,11 @@ class RepoWebListenerConfigActivator
         {
             badThings.Value = false;
             RepoWebListener.Logger.LogWarning("All bad events are disabled. Assuming BadThings config entry to false.");
+        }
+        else
+        {
+            // If at least one bad event is enabled, we need to make sure that the bad event is enabled
+            badThings.Value = true;
         }
 
 
