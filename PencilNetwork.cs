@@ -2,6 +2,7 @@ using System.IO;
 using ExitGames.Client.Photon;
 using REPOLib.Modules;
 using UnityEngine;
+namespace RepoWebListener;
 
 class PencilNetwork
 {
@@ -57,15 +58,19 @@ class PencilNetwork
     private static void HandleChatterEvent(EventData eventData)
     {
         MissionOptions options = (MissionOptions)eventData.CustomData;
-        MissionUI instance = MissionUI.instance;
+        PencilUI instance = PencilUI.instance;
         if (instance != null)
         {
-            instance.MissionText(
+            instance.ShowEventText(
                 options.msg,
                 options.color1,
                 options.color2,
                 options.time
             );
+        }
+        else
+        {
+            RepoWebListener.Logger.LogError("PencilUI instance is null");
         }
     }
 }

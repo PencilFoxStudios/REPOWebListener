@@ -22,7 +22,6 @@ public class RepoWebListener : BaseUnityPlugin
     static HttpListener listener = new HttpListener();
     string url = "http://localhost";
     private CancellationTokenSource cts = new CancellationTokenSource();
-    Queue<string> chatters = new Queue<string>();
     public static Dictionary<string, string> AllowedItems = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     public static Dictionary<string, string> AllowedValuables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
     public static Dictionary<string, EnemySetup> AllowedEnemies = new Dictionary<string, EnemySetup>(StringComparer.OrdinalIgnoreCase);
@@ -55,7 +54,6 @@ public class RepoWebListener : BaseUnityPlugin
         Task.Run(() => GoThroughChatters(cts.Token));
         // Set up networking
         PencilNetwork.InitNetworking();
-        
     }
     private void Start()
     {

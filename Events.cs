@@ -683,7 +683,7 @@ class Events
                 msg = (randomEvent.Action.Type == EType.BAD?"<color=#CC250B>":"<color=#7DCC0B>") + resultMessageToShow + "</color>",
                 color1 = Color.white,
                 color2 = Color.white,
-                time = PencilConfig.MinimumTimeBetweenEvents / 2
+                time = PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4)
             }, new RaiseEventOptions { Receivers = ReceiverGroup.All }, SendOptions.SendReliable);
         });
 

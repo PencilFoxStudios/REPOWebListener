@@ -1,5 +1,11 @@
 # Changelog
 
+## B1.0.7 (5/22/2025)
+- **Improvement**: Replaced the way events are announced in the **FOCUS** UI with it's own dedicated UI that doesn't interfere with other game missions. It also allows for dead players to see the event messages.
+- **New Config Option**: Added `Events.General.DeadPlayersSeeEvents` option to allow dead players to see the event messages, which is `true` by default.
+- **Fix**: Fixed an issue where the valuable dictionary was not being properly defined, causing the game to throw an error when trying to spawn valuables. The valuables should now spawn correctly.
+- **Fix**: Fixed an issue where the item dictionary was not being properly defined, causing the game to throw an error when trying to spawn items. The items should now spawn correctly.
+
 ## B1.0.6 (5/21/2025)
 - **New Feature**: The plugin will now respond to the GET requests with a message indicating that the event was triggered, as well as the event that was triggered. This would be useful for chatbots and other integrations that want to know what event was triggered.
 - **New Config Option**: Added `Events.General.MinimumTimeBetweenEvents` option to allow the user to set a minimum time between events. This is useful for preventing run-ending spam. The hard-coded minimum is 3 seconds, because I don't want semiwork to get sad.
