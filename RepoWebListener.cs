@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using static RepoWebListener.PencilUtils;
 namespace RepoWebListener;
 
-[BepInPlugin("PencilFoxStudios.RepoWebListener", "RepoWebListener", "1.0")]
+[BepInPlugin("PencilFoxStudios.RepoWebListener", "RepoWebListener", "1.0.7")]
 [BepInDependency(REPOLib.MyPluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
 public class RepoWebListener : BaseUnityPlugin
 {
@@ -52,13 +52,13 @@ public class RepoWebListener : BaseUnityPlugin
         // Set up the listener to handle requests
         Task.Run(() => ListenLoop(cts.Token));
         Task.Run(() => GoThroughChatters(cts.Token));
-        // Set up networking
-        PencilNetwork.InitNetworking();
     }
     private void Start()
     {
         Logger.LogInfo("RepoWebListener is ready!");
+
         Events.Init();
+        
     }
 
     private async Task ListenLoop(CancellationToken token)

@@ -5,7 +5,7 @@
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>PencilFoxStudios</Authors>
-    <Version>1.0.5</Version>
+    <Version>1.0.7</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -20,9 +20,7 @@
 
   <!-- Package References -->
   <ItemGroup>
-    <!-- <Reference Include="MenuLib">
-    <HintPath>C:\Users\shack\AppData\Roaming\r2modmanPlus-local\REPO\profiles\PencilRepoIntegration\BepInEx\plugins\nickklmao-MenuLib\MenuLib.dll</HintPath>
-  </Reference> -->
+    <ProjectReference Include="C:\Users\shack\source\repos\MissionUtils\MissionUtils.csproj" />
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" IncludeAssets="build" />
     <PackageReference Include="Linkoid.Repo.Plugin.Build" Version="*" PrivateAssets="all" />

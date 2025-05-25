@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ES3Types;
+
 using ExitGames.Client.Photon;
-using ExitGames.Client.Photon.StructWrapping;
+
 using Photon.Realtime;
 using REPOLib.Modules;
 using RepoWebListener;
 using UnityEngine;
-using UnityEngine.InputSystem.Controls;
-using static RepoWebListener.PencilUtils;
-namespace RepoWebListener;
+using MissionUtils;
 
+using static RepoWebListener.PencilUtils;
+using static MissionUtils.MissionUtils;
+
+namespace RepoWebListener;
 class Events
 {
     public class EAction
@@ -246,7 +248,7 @@ class Events
                     return ["???"];
                 }
                 Enemies.SpawnEnemy(enemySetup, player.transform.position + player.transform.up * 0.2f, Quaternion.identity, false);
-                return [randomEnemy];
+                return [Dictionaries.EnemyPaths[randomEnemy]];
             }, isForOnlyAlivePlayers: true));
         }
 
@@ -615,7 +617,7 @@ class Events
             }, isForOnlyDeadPlayers: true));
         }
 
-
+        
 
 
     }
@@ -677,14 +679,30 @@ class Events
             // Log the result
             RepoWebListener.Logger.LogInfo($"Event executed: {randomEvent.Action.Name} ({(randomEvent.Action.IsForAll ? "All" : randomEvent.Action.Victim)})");
             RepoWebListener.Logger.LogInfo($"Result: {resultMessageToShow}");
+            MissionOptions missionOptions = MissionOptions.Create(
+                randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>" +
+                resultMessageToShow +
+                "</color>",
+                Color.white,
+                Color.white,
+                PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4)
+            );
+            // new MissionOptions()
+            // {
+            //     msg = (randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>") + resultMessageToShow + "</color>",
+            //     color1 = Color.white,
+            //     color2 = Color.white,
+            //     time = PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4)
+            // };
             // Show the result message to all players
-            PencilNetwork.NewChatterEvent.RaiseEvent(new PencilNetwork.MissionOptions()
-            {
-                msg = (randomEvent.Action.Type == EType.BAD?"<color=#CC250B>":"<color=#7DCC0B>") + resultMessageToShow + "</color>",
-                color1 = Color.white,
-                color2 = Color.white,
-                time = PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4)
-            }, new RaiseEventOptions { Receivers = ReceiverGroup.All }, SendOptions.SendReliable);
+            MissionUI MUIInstance = MissionUI.instance;
+            MissionUI.instance.MissionText("%broadcast%" + (randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>") +
+                resultMessageToShow +
+                "</color>",
+                Color.white,
+                Color.white,
+                PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4));
+ 
         });
 
     }

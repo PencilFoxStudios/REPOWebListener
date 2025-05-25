@@ -1,10 +1,14 @@
 # Changelog
 
 ## B1.0.7 (5/22/2025)
-- **Improvement**: Replaced the way events are announced in the **FOCUS** UI with it's own dedicated UI that doesn't interfere with other game missions. It also allows for dead players to see the event messages.
+- **New Dependency**: Added a new dependency mod, [MissionUtils](https://thunderstore.io/c/repo/p/PencilFoxStudios/MissionUtils/).
+- **Improvement**: Replaced the way events are announced in the **FOCUS** UI. It also allows for dead players to see the event messages.
 - **New Config Option**: Added `Events.General.DeadPlayersSeeEvents` option to allow dead players to see the event messages, which is `true` by default.
+- **Tweak**: Made the event messages call enemies by their in-game name instead of their internal name. Nobody knows what a "Slow Mouth" is, apparently.
+- **Fix**: Fixed an issue that caused the game to miss the first event after an extraction point was reached/the vanilla message was sent. There is now a queue system thanks to the new dependency.
 - **Fix**: Fixed an issue where the valuable dictionary was not being properly defined, causing the game to throw an error when trying to spawn valuables. The valuables should now spawn correctly.
 - **Fix**: Fixed an issue where the item dictionary was not being properly defined, causing the game to throw an error when trying to spawn items. The items should now spawn correctly.
+- **Fix**: Fixed the logo overlapping the border a bit.
 
 ## B1.0.6 (5/21/2025)
 - **New Feature**: The plugin will now respond to the GET requests with a message indicating that the event was triggered, as well as the event that was triggered. This would be useful for chatbots and other integrations that want to know what event was triggered.
