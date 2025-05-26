@@ -68,7 +68,10 @@ public class RepoWebListener : BaseUnityPlugin
             while (!token.IsCancellationRequested)
             {
                 HttpListenerContext context = await listener.GetContextAsync();
-                _ = Task.Run(() => HandleRequest(context)); // handle each request separately
+                HandleRequest(context);
+                // apparently threading in unity is illegal
+                // unity sucks
+                // _ = Task.Run(() => HandleRequest(context)); // handle each request separately
 
             }
         }

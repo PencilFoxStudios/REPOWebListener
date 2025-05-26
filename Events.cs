@@ -15,6 +15,7 @@ using static RepoWebListener.PencilUtils;
 using static MissionUtils.MissionUtils;
 
 namespace RepoWebListener;
+
 class Events
 {
     public class EAction
@@ -90,11 +91,11 @@ class Events
         }
         public static Event Generate(string chatter, EType type)
         {
-            
+
             EAction action = type == EType.BAD ?
             PossibleBadActions[Randomizer.Next(PossibleBadActions.Count)] :
             PossibleGoodActions[Randomizer.Next(PossibleGoodActions.Count)];
-          
+
             action.Type = type;
             string chatterMessage = $"{chatter}, you rolled a {action.Name} event! It has been added to the queue.";
             return new Event(action, chatterMessage, chatter);
@@ -617,7 +618,7 @@ class Events
             }, isForOnlyDeadPlayers: true));
         }
 
-        
+
 
 
     }
@@ -643,67 +644,58 @@ class Events
         // Get the next event
         Event randomEvent = EventQueue.Dequeue();
         // Do the action in another thread, so we can still keep going
-        Task.Run(() =>
+
+        string resultMessageToShow;
+        if (!randomEvent.Action.IsForAll)
         {
-            string resultMessageToShow = "";
-            if (!randomEvent.Action.IsForAll)
+            Func<List<PlayerAvatar>> playerGetterToUse;
+            if (randomEvent.Action.IsForOnlyDeadPlayers)
             {
-                Func<List<PlayerAvatar>> playerGetterToUse;
-                if (randomEvent.Action.IsForOnlyDeadPlayers)
-                {
-                    playerGetterToUse = GetDeadPlayers;
-                }
-                else if (randomEvent.Action.IsForOnlyAlivePlayers)
-                {
-                    playerGetterToUse = GetAlivePlayers;
-                }
-                else
-                {
-                    playerGetterToUse = GetAllPlayers;
-                }
-                List<PlayerAvatar> elligiblePlayers = playerGetterToUse();
-                if (elligiblePlayers.Count == 0)
-                {
-                    return;
-                }
-                // Choose a random player to do the action on
-                PlayerAvatar player = playerGetterToUse()[Randomizer.Next(GetAlivePlayers().Count)];
-                // Execute the action
-                resultMessageToShow = randomEvent.Execute(player);
+                playerGetterToUse = GetDeadPlayers;
+            }
+            else if (randomEvent.Action.IsForOnlyAlivePlayers)
+            {
+                playerGetterToUse = GetAlivePlayers;
             }
             else
             {
-                // Execute the action
-                resultMessageToShow = randomEvent.Execute();
+                playerGetterToUse = GetAllPlayers;
             }
-            // Log the result
-            RepoWebListener.Logger.LogInfo($"Event executed: {randomEvent.Action.Name} ({(randomEvent.Action.IsForAll ? "All" : randomEvent.Action.Victim)})");
-            RepoWebListener.Logger.LogInfo($"Result: {resultMessageToShow}");
-            MissionOptions missionOptions = MissionOptions.Create(
-                randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>" +
-                resultMessageToShow +
-                "</color>",
-                Color.white,
-                Color.white,
-                PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4)
-            );
-            // new MissionOptions()
-            // {
-            //     msg = (randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>") + resultMessageToShow + "</color>",
-            //     color1 = Color.white,
-            //     color2 = Color.white,
-            //     time = PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4)
-            // };
-            // Show the result message to all players
-            MissionUI MUIInstance = MissionUI.instance;
-            MissionUI.instance.MissionText("%broadcast%" + (randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>") +
-                resultMessageToShow +
-                "</color>",
-                Color.white,
-                Color.white,
-                PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4));
- 
-        });
+            List<PlayerAvatar> elligiblePlayers = playerGetterToUse();
+            if (elligiblePlayers.Count == 0)
+            {
+                return;
+            }
+            // Choose a random player to do the action on
+            PlayerAvatar player = playerGetterToUse()[Randomizer.Next(GetAlivePlayers().Count)];
+            // Execute the action
+            resultMessageToShow = randomEvent.Execute(player);
+        }
+        else
+        {
+            // Execute the action
+            resultMessageToShow = randomEvent.Execute();
+        }
+        // Log the result
+        RepoWebListener.Logger.LogInfo($"Event executed: {randomEvent.Action.Name} ({(randomEvent.Action.IsForAll ? "All" : randomEvent.Action.Victim)})");
+        RepoWebListener.Logger.LogInfo($"Result: {resultMessageToShow}");
+        MissionOptions missionOptions = MissionOptions.Create(
+            randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>" +
+            resultMessageToShow +
+            "</color>",
+            Color.white,
+            Color.white,
+            PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4)
+        );
+        // Show the result message to all players
+        MissionUI.instance.MissionText("%broadcast%" + (randomEvent.Action.Type == EType.BAD ? "<color=#CC250B>" : "<color=#7DCC0B>") +
+            resultMessageToShow +
+            "</color>",
+            Color.white,
+            Color.white,
+            PencilConfig.MinimumTimeBetweenEvents - (PencilConfig.MinimumTimeBetweenEvents / 4));
+
+
 
     }
 }
