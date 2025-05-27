@@ -313,14 +313,16 @@ class Events
                     return ["???"];
                 }
                 string randomItem = RepoWebListener.AllowedItems.Keys.ElementAt(Randomizer.Next(RepoWebListener.AllowedItems.Count));
-                Item item = Items.GetItemByName(randomItem);
+                Item item = Items.GetItemThatContainsName(randomItem);
                 if (item == null)
                 {
-                    RepoWebListener.Logger.LogError($"Item {randomItem} not found. Cannot spawn.");
+                    RepoWebListener.Logger.LogError($"Item {randomItem} not found out of {Items.GetItems().Count} items. Cannot spawn.");
+                    // Log the first item for debugging
+                    RepoWebListener.Logger.LogError($"First item: {Items.GetItems().FirstOrDefault()?.name}");
                     return ["???"];
                 }
                 Items.SpawnItem(item, player.transform.position + player.transform.up * 0.2f, Quaternion.identity);
-                return [randomItem];
+                return [randomItem.Replace("Item ", "")];
             }, isForOnlyAlivePlayers: true));
         }
         if (PencilConfig.GoodEventSpawnRandomValuable && GetAllowedValuables().Count > 0)
@@ -332,17 +334,20 @@ class Events
                 if (player == null)
                 {
                     RepoWebListener.Logger.LogError("Player is null. Cannot spawn item.");
+
                     return ["???"];
                 }
                 string randomItem = RepoWebListener.AllowedValuables.Keys.ElementAt(Randomizer.Next(RepoWebListener.AllowedValuables.Count));
-                ValuableObject valuable = Valuables.GetValuableByName(randomItem);
+                ValuableObject valuable = Valuables.GetValuableThatContainsName(randomItem);
                 if (valuable == null)
                 {
-                    RepoWebListener.Logger.LogError($"Valuable {randomItem} not found. Cannot spawn.");
+                    RepoWebListener.Logger.LogError($"Valuable {randomItem} not found out of {Valuables.GetValuables().Count} valuables. Cannot spawn.");
+                    // Log the first valueable for debugging
+                    RepoWebListener.Logger.LogError($"First valuable: {Valuables.GetValuables().FirstOrDefault()?.name}");
                     return ["???"];
                 }
                 Valuables.SpawnValuable(valuable, player.transform.position + player.transform.up * 0.2f, Quaternion.identity);
-                return [randomItem];
+                return [randomItem.Replace("Valuable ", "")];
             }, isForOnlyAlivePlayers: true));
         }
         PunManager punManager = PunManager.instance;

@@ -51,14 +51,38 @@ public class RepoWebListener : BaseUnityPlugin
 
         // Set up the listener to handle requests
         Task.Run(() => ListenLoop(cts.Token));
-        Task.Run(() => GoThroughChatters(cts.Token));
+        // GoThroughChatters(); as Coroutine
+        StartCoroutine(GoThroughChattersCoroutine());
+
     }
     private void Start()
     {
         Logger.LogInfo("RepoWebListener is ready!");
 
         Events.Init();
-        
+
+    }
+
+    private System.Collections.IEnumerator GoThroughChattersCoroutine()
+    {
+        while (true)
+        {
+            if (Events.EventQueue.Count == 0 ||
+            !SemiFunc.IsMultiplayer() ||
+             IsBlacklistedLevel() // Check if the current level is blacklisted
+            || (LevelGenerator.Instance.Generated == false) // Check if the level is generated
+            || (!((RunManager.instance.levelArena == RunManager.instance.levelCurrent) && PencilConfig.EnabledInArenaLevel) && (RoundDirector.instance.extractionPointsCompleted == 0 && !RoundDirector.instance.extractionPointActive))
+            // Check if the players haven't left truck yet
+            )
+            {
+                yield return new WaitForSeconds(1f);
+                continue;
+            }
+            Events.RunNextEvent();
+
+            // Delay for at least 3 seconds before processing the next chatter
+            yield return new WaitForSeconds(Math.Max(PencilConfig.MinimumTimeBetweenEvents, 3));
+        }
     }
 
     private async Task ListenLoop(CancellationToken token)
@@ -69,10 +93,6 @@ public class RepoWebListener : BaseUnityPlugin
             {
                 HttpListenerContext context = await listener.GetContextAsync();
                 HandleRequest(context);
-                // apparently threading in unity is illegal
-                // unity sucks
-                // _ = Task.Run(() => HandleRequest(context)); // handle each request separately
-
             }
         }
         catch (HttpListenerException ex)
@@ -84,42 +104,6 @@ public class RepoWebListener : BaseUnityPlugin
             Logger.LogError($"Error in ListenLoop: {ex}");
         }
     }
-
-
-
-
-    private async Task GoThroughChatters(CancellationToken token)
-    {
-
-        while (!token.IsCancellationRequested)
-        {
-            if (Events.EventQueue.Count == 0 ||
-            !SemiFunc.IsMultiplayer() ||
-             IsBlacklistedLevel() // Check if the current level is blacklisted
-            || (LevelGenerator.Instance.Generated == false) // Check if the level is generated
-            || (RoundDirector.instance.extractionPointsCompleted == 0 &&
-            (!RoundDirector.instance.extractionPointActive)) // Check if the players haven't left truck yet
-
-            )
-            {
-
-                await Task.Delay(1000, token); // Wait for 1 second if there are no chatters or
-                // Logger.LogInfo("Waiting for the time to be right...");
-                                               // not in multiplayer
-                continue;
-            }
-            Events.RunNextEvent();
-
-
-
-            // Delay for at least 3 seconds before processing the next chatter
-            await Task.Delay(Math.Max(PencilConfig.MinimumTimeBetweenEvents, 3)*1000, token);
-        }
-
-
-    }
-
-
 
     internal void Patch()
     {

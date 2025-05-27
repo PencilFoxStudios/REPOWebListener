@@ -1,10 +1,15 @@
 # Changelog
 
+## B1.0.8 (5/27/2025)
+- **Hotfix:** Fixed ``manifest.json`` to include the correct version number for [MissionUtils](https://thunderstore.io/c/repo/p/PencilFoxStudios/MissionUtils/).
+
 ## B1.0.7 (5/22/2025)
+
 - **New Dependency**: Added a new dependency mod, [MissionUtils](https://thunderstore.io/c/repo/p/PencilFoxStudios/MissionUtils/).
 - **Improvement**: Replaced the way events are announced in the **FOCUS** UI. It also allows for dead players to see the event messages.
 - **New Config Option**: Added `Events.General.DeadPlayersSeeEvents` option to allow dead players to see the event messages, which is `true` by default.
 - **Tweak**: Made the event messages call enemies by their in-game name instead of their internal name. Nobody knows what a "Slow Mouth" is, apparently.
+- **Fix**: Addressed an issue where events would not trigger in the Arena level, regardless of the config settings.
 - **Fix**: Improved stability by realizing that apparently Unity hates multi-threading in relation to their API objects, and thus removed the multi-threading from the event system. This should prevent crashes and other issues related to threading. Nobody told me. This is really all just trial and error.
 - **Fix**: Fixed an issue that caused the game to miss the first event after an extraction point was reached/the vanilla message was sent. There is now a queue system thanks to the new dependency.
 - **Fix**: Fixed an issue where the valuable dictionary was not being properly defined, causing the game to throw an error when trying to spawn valuables. The valuables should now spawn correctly.
@@ -12,6 +17,7 @@
 - **Fix**: Fixed the logo overlapping the border a bit.
 
 ## B1.0.6 (5/21/2025)
+
 - **New Feature**: The plugin will now respond to the GET requests with a message indicating that the event was triggered, as well as the event that was triggered. This would be useful for chatbots and other integrations that want to know what event was triggered.
 - **New Config Option**: Added `Events.General.MinimumTimeBetweenEvents` option to allow the user to set a minimum time between events. This is useful for preventing run-ending spam. The hard-coded minimum is 3 seconds, because I don't want semiwork to get sad.
 - **Tweak**: Changed the way event messages are generated, and added a few more messages. The messages are now more unique and varied, and should be more fun to read. Let me know if you have any suggestions for more messages!
