@@ -2,13 +2,13 @@ name: Build and Package REPOWebListener
  
 on:
   push:
-    branches: ["main", "prerelease"]
-  pull_request:
-    branches: ["main", "prerelease"]
+    branches:
+      - main
+      - prerelease
 jobs:
   build:
+    if: contains(github.event.head_commit.message, '[build]')
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -51,10 +51,14 @@ jobs:
           # Copy required Thunderstore files
           cp manifest.json CHANGELOG.md README.md icon.png ts_output/
 
-          # Create final zip from contents of ts_output/ WITHOUT nesting ts_output folder inside the zip
+          # Remove old zip if it exists
+          rm -f PencilFoxStudios-REPOWebListener.zip
+
+          # Zip contents inside ts_output WITHOUT including ts_output folder itself
           cd ts_output
           zip -r ../PencilFoxStudios-REPOWebListener.zip .
           cd ..
+
 
 
       - name: Upload artifact
