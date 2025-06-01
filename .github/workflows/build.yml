@@ -2,74 +2,75 @@ name: Build and Package REPOWebListener
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout source
-      uses: actions/checkout@v4
-      with:
-        submodules: true
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Add NuGet sources
-      run: |
-        dotnet nuget add source https://nuget.bepinex.dev/v3/index.json --name BepInEx
-        dotnet nuget add source https://nuget.windows10ce.com/nuget/v3/index.json --name Windows10CE
+      - name: Add NuGet sources
+        run: |
+          dotnet nuget add source https://nuget.bepinex.dev/v3/index.json --name BepInEx
+          dotnet nuget add source https://nuget.windows10ce.com/nuget/v3/index.json --name Windows10CE
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build DLL
-      run: dotnet build --no-restore --configuration Release
+      - name: Build DLL
+        run: dotnet build --no-restore --configuration Release
 
-    - name: Extract version from manifest.json
-      id: manifest
-      run: |
-        VERSION=$(jq -r .version_number manifest.json)
-        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+      - name: Extract version from manifest.json
+        id: manifest
+        run: |
+          VERSION=$(jq -r .version_number manifest.json)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-    - name: Package Thunderstore zip
-      run: |
-        mkdir -p ts_output
+      - name: Package Thunderstore zip
+        run: |
+          mkdir -p ts_output
 
-        # Find and copy DLL
-        DLL_PATH=$(find . -type f -name "RepoWebListener.dll" | head -n 1)
-        if [ -z "$DLL_PATH" ]; then
-          echo "RepoWebListener.dll not found!" && exit 1
-        fi
-        cp "$DLL_PATH" ts_output/
+          # Find and copy DLL
+          DLL_PATH=$(find . -type f -name "RepoWebListener.dll" | head -n 1)
+          if [ -z "$DLL_PATH" ]; then
+            echo "RepoWebListener.dll not found!" && exit 1
+          fi
+          cp "$DLL_PATH" ts_output/
 
-        # Copy required Thunderstore files
-        cp manifest.json CHANGELOG.md README.md icon.png ts_output/
+          # Copy required Thunderstore files
+          cp manifest.json CHANGELOG.md README.md icon.png ts_output/
 
-        # Create final zip
-        cd ts_output
-        zip -r ../PencilFoxStudios-REPOWebListener.zip .
-        cd ..
+          # Create final zip
+          cd ts_output
+          zip -r ../PencilFoxStudios-REPOWebListener.zip .
+          cd ..
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: Thunderstore-Package
-        path: PencilFoxStudios-REPOWebListener.zip
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Thunderstore-Package
+          path: PencilFoxStudios-REPOWebListener.zip
 
-    - name: Create/update GitHub draft release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ steps.manifest.outputs.VERSION }}-${{ github.ref_name}}
-        name: REPOWebListener v${{ steps.manifest.outputs.VERSION }}
-        body_path: CHANGELOG.md
-        draft: true
-        prerelease: true
-        files: PencilFoxStudios-REPOWebListener.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create/update GitHub draft release
+        if: github.event_name == 'push' # <-- only run on push, not PR
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.manifest.outputs.VERSION }}-${{ github.ref_name }}
+          name: REPOWebListener v${{ steps.manifest.outputs.VERSION }}
+          body_path: CHANGELOG.md
+          draft: true
+          prerelease: true
+          files: PencilFoxStudios-REPOWebListener.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
