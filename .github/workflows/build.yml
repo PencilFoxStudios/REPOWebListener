@@ -80,7 +80,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Comment artifact link on PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'push' && github.event.pull_request.number != '' # <-- only run on PR push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ID: ${{ github.run_id }}
