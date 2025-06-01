@@ -20,7 +20,7 @@
 
   <!-- Package References -->
   <ItemGroup>
-    <ProjectReference Include="C:\Users\shack\source\repos\MissionUtils\MissionUtils.csproj" />
+    <ProjectReference Include="MissionUtils/MissionUtils.csproj" />
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" IncludeAssets="build" />
     <PackageReference Include="Linkoid.Repo.Plugin.Build" Version="*" PrivateAssets="all" />
