@@ -45,13 +45,16 @@ public class Dictionaries
     {"Item Upgrade Player Health", "items/Item Upgrade Player Health"},
     {"Item Upgrade Player Sprint Speed", "items/Item Upgrade Player Sprint Speed"},
     {"Item Upgrade Player Tumble Launch", "items/Item Upgrade Player Tumble Launch"},
-    {"Item Valuable Tracker", "items/Item Valuable Tracker"}
+    {"Item Upgrade Player Crouch Rest", "items/Item Upgrade Player Crouch Rest"},
+    {"Item Upgrade Player Tumble Wings", "items/Item Upgrade Player Tumble Wings"},      
+    { "Item Valuable Tracker", "items/Item Valuable Tracker"}
 };
 
 public static readonly Dictionary<string, string> ValuablePaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
 {
+    
 //Tiny Generic
-    {"Valuable Diamond", "valuables/01 tiny/Valuable Diamond"},
+    { "Valuable Diamond", "valuables/01 tiny/Valuable Diamond"},
     {"Valuable Emerald Bracelet", "valuables/01 tiny/Valuable Emerald Bracelet"},
     {"Valuable Goblet", "valuables/01 tiny/Valuable Goblet"},
     {"Valuable Ocarina", "valuables/01 tiny/Valuable Ocarina"},
@@ -66,8 +69,9 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     {"Valuable Ruben Doll", "valuables/01 tiny/Valuable RubenDoll"},
     {"Valuable Silver Fish", "valuables/01 tiny/Valuable SilverFish"},
     {"Valuable Toast", "valuables/01 tiny/Valuable Toast"},
+    {"Valuable Toy Car", "valuables/01 tiny/Valuable Toy Car"},    
     //Small Generic
-    {"Valuable Crown", "valuables/02 small/Valuable Crown"},
+    { "Valuable Crown", "valuables/02 small/Valuable Crown"},
     {"Valuable Doll", "valuables/02 small/Valuable Doll"},
     {"Valuable Frog", "valuables/02 small/Valuable Frog"},
     {"Valuable Gem Box", "valuables/02 small/Valuable Gem Box"},
@@ -104,11 +108,12 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     {"Valuable Wizard Time Glass", "valuables/03 medium/Valuable Wizard Time Glass"},    
     //Medium Manor
     { "Valuable Gramophone", "valuables/03 medium/Valuable Gramophone"},
-    {"Valuable Radio", "valuables/03 medium/Valuable Radio"},    
+    {"Valuable Radio", "valuables/03 medium/Valuable Radio"},
     {"Valuable Ship In Bottle", "valuables/03 medium/Valuable Ship in a bottle"},
     //Medium Museum
+    {"Valuable MonkeyBox", "valuables/03 medium/Valuable Monkey Box"},
     //Big Generic
-    {"Valuable Vase Big", "valuables/04 big/Valuable Vase Big"},    
+    { "Valuable Vase Big", "valuables/04 big/Valuable Vase Big"},    
     //Big Arctic
     { "Valuable Arctic Barrel", "valuables/04 big/Valuable Arctic Barrel"},
     {"Valuable Arctic Big Sample", "valuables/04 big/Valuable Arctic Big Sample"},
@@ -123,10 +128,16 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     //Big Manor
     {"Valuable Diamond Display", "valuables/04 big/Valuable Diamond Display"},
     {"Valuable Scream Doll", "valuables/04 big/Valuable Scream Doll"},
-    {"Valuable Television", "valuables/04 big/Valuable Television"},    
+    {"Valuable Television", "valuables/04 big/Valuable Television"},
     //Big Museum
+    {"Valuable Uranium Mug Deluxe", "valuables/04 big/Valuable Uranium Mug Deluxe"},
+    {"Valuable Museum Boombox", "valuables/04 big/Valuable Uranium Museum Boombox"},
+    {"Valuable Uranium Golden Poop", "valuables/04 big/Valuable Uranium Golden Swirl"},
+    {"Valuable Uranium Gem Burger", "valuables/04 big/Valuable Uranium Gem Burger"},
+    {"Valuable Uranium Egg", "valuables/04 big/Valuable Uranium Egg"},
+    {"Valuable Uranium Baby Head", "valuables/04 big/Valuable Uranium Baby Head"},
     //Wide Generic
-    {"Valuable Animal Crate", "valuables/05 wide/Valuable Animal Crate"},    
+    { "Valuable Animal Crate", "valuables/05 wide/Valuable Animal Crate"},    
     //Wide Arctic
     {"Valuable Arctic Ice Block", "valuables/05 wide/Valuable Arctic Ice Block"},       
     //Wide Wizard
@@ -135,17 +146,21 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     {"Valuable Dinosaur", "valuables/05 wide/Valuable Dinosaur"},
     {"Valuable Piano", "valuables/05 wide/Valuable Piano"},
     //Wide Museum
+    {"Valuable Horse", "valuables/06 tall/Valuable Horse"},
     //Tall Generic
     //Tall Arctic 
-    {"Valuable Arctic Science Station", "valuables/06 tall/Valuable Arctic Science Station"},    
+    {"Valuable Arctic Science Station", "valuables/06 tall/Valuable Arctic Science Station"},
     //Tall Wizard
+    {"Valuable Wizard Dumgolf's Staff", "valuables/06 tall/Valuable Wizard Dumgolfs Staff"},
+    {"Valuable Wizard Sword", "valuables/06 tall/Valuable Wizard Sword"},
     //Tall Manor
-    { "Valuable Painting", "valuables/06 tall/Valuable Painting"},
-    {"Valuable Harp", "valuables/06 tall/Valuable Harp"},   
+    {"Valuable Painting", "valuables/06 tall/Valuable Painting"},
+    {"Valuable Harp", "valuables/06 tall/Valuable Harp"},
     //Tall Museum
+    {"Valuable Milk", "valuables/06 tall/Valuable Milk"},
     //Very Tall Generic
     //Very Tall Arctic
-    {"Valuable Arctic Server Rack", "valuables/07 very tall/Valuable Arctic Server Rack"},
+    { "Valuable Arctic Server Rack", "valuables/07 very tall/Valuable Arctic Server Rack"},
     //Very Tall Wizard
     {"Valuable Wizard Broom", "valuables/07 very tall/Valuable Wizard Broom"},          
     //Very Tall Manor
@@ -153,10 +168,11 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     {"Valuable Golden Statue", "valuables/07 very tall/Valuable Golden Statue"},         
     //Very Tall Museum
     {"Valuable Traffic light", "valuables/07 very tall/Valuable Traffic Light"},
+    {"Valuable Blender", "valuables/07 very tall/Valuable Blender"},    
     //Unknown / Unimplimeneted
-    {"Valuable Marble Table", "valuables/03 medium/Valuable Marble Table"}
- 
-
+    // {"Valuable Marble Table", "valuables/03 medium/Valuable Marble Table"}
+    // {"Valuable Teeth", "valuables/04 big/Valuable Teeth"}
+    // {"Valuable Tray", "valuables/04 big/Valuable Tray"}
 
 
 
