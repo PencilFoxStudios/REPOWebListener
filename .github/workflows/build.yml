@@ -51,8 +51,10 @@ jobs:
           # Copy required Thunderstore files
           cp manifest.json CHANGELOG.md README.md icon.png ts_output/
 
-          # Create final zip from contents of ts_output/
-          zip -r PencilFoxStudios-REPOWebListener.zip ts_output/*
+          # Create final zip from contents of ts_output/ WITHOUT nesting ts_output folder inside the zip
+          cd ts_output
+          zip -r ../PencilFoxStudios-REPOWebListener.zip .
+          cd ..
 
 
       - name: Upload artifact
