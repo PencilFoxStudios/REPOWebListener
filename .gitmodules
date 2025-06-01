@@ -1,0 +1,3 @@
+[submodule "MissionUtils"]
+	path = MissionUtils
+	url = https://github.com/PencilFoxStudios/REPOMissionUtils
