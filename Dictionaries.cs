@@ -89,8 +89,11 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     //Small Manor
     {"Valuable Music Box", "valuables/02 small/Valuable Music Box"},
     //Small Museum
+    {"Valuable Cubic Tower", "valuables/02 small/ValuableCubic Tower"},
+    {"Valuable Flesh Blob", "valuables/02 small/Valuable Flesh Blob"},
+    {"Valuable Flesh Blob", "valuables/02 small/Valuable Wire Figure"},
     //Medium Generic
-    {"Valuable Bottle", "valuables/03 medium/Valuable Bottle"},
+    { "Valuable Bottle", "valuables/03 medium/Valuable Bottle"},
     {"Valuable Clown", "valuables/03 medium/Valuable Clown"},
     {"Valuable Vase", "valuables/03 medium/Valuable Vase"},
     {"Valuable Trophy", "valuables/03 medium/Valuable Trophy"},
@@ -112,6 +115,10 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     {"Valuable Ship In Bottle", "valuables/03 medium/Valuable Ship in a bottle"},
     //Medium Museum
     {"Valuable MonkeyBox", "valuables/03 medium/Valuable Monkey Box"},
+    {"Valuable Pacifier", "valuables/03 medium/Valuable Pacifier"},
+    {"Valuable HandFace", "valuables/03 medium/Valuable HandFace"},
+    {"Valuable Gumball Machine", "valuables/03 medium/Valuable Gumball"},
+    {"Valuable Gumball Machine", "valuables/03 medium/Valuable Gumball"},                
     //Big Generic
     { "Valuable Vase Big", "valuables/04 big/Valuable Vase Big"},    
     //Big Arctic
@@ -168,11 +175,12 @@ public static readonly Dictionary<string, string> ValuablePaths = new Dictionary
     {"Valuable Golden Statue", "valuables/07 very tall/Valuable Golden Statue"},         
     //Very Tall Museum
     {"Valuable Traffic light", "valuables/07 very tall/Valuable Traffic Light"},
-    {"Valuable Blender", "valuables/07 very tall/Valuable Blender"},    
+    {"Valuable Blender", "valuables/07 very tall/Valuable Blender"},
     //Unknown / Unimplimeneted
-    // {"Valuable Marble Table", "valuables/03 medium/Valuable Marble Table"}
-    // {"Valuable Teeth", "valuables/04 big/Valuable Teeth"}
-    // {"Valuable Tray", "valuables/04 big/Valuable Tray"}
+    // {"Valuable Marble Table", "valuables/03 medium/Valuable Marble Table"},
+    // {"Valuable Teeth", "valuables/04 big/Valuable Teeth"},
+    // {"Valuable Tray", "valuables/04 big/Valuable Tray"},
+    // {"Valuable Plane", "valuables/02 small/Valuable Plane"}
 
 
 
