@@ -42,9 +42,9 @@ jobs:
         mkdir -p ts_output
 
         # Find and copy DLL
-        DLL_PATH=$(find . -type f -name "REPOWebListener.dll" | head -n 1)
+        DLL_PATH=$(find . -type f -name "RepoWebListener.dll" | head -n 1)
         if [ -z "$DLL_PATH" ]; then
-          echo "REPOWebListener.dll not found!" && exit 1
+          echo "RepoWebListener.dll not found!" && exit 1
         fi
         cp "$DLL_PATH" ts_output/
 
