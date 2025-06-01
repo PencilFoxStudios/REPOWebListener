@@ -59,7 +59,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Thunderstore-Package
+          name: PencilFoxStudios-REPOWebListener
           path: PencilFoxStudios-REPOWebListener.zip
 
       - name: Create/update GitHub draft release
