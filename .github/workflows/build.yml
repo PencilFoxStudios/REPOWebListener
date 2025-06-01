@@ -74,3 +74,23 @@ jobs:
           files: PencilFoxStudios-REPOWebListener.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Comment artifact link on PR
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # Construct the artifact URL for this workflow run
+          ARTIFACT_URL="https://github.com/${REPO}/suites/${RUN_ID}/artifacts"
+
+          # Prepare the comment body
+          COMMENT_BODY="🦊🤖 r2modman/thunderstore ZIP is ready to test! [${${{github.run_id}}}](${ARTIFACT_URL})"
+
+          # Post comment on the PR using GitHub API
+          curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Content-Type: application/json" \
+              -X POST \
+              -d "{\"body\":\"${COMMENT_BODY}\"}" \
+              "https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments"
