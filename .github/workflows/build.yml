@@ -39,8 +39,8 @@ jobs:
         # Copy the built DLL
         find . -name "REPOWebListener.dll" -exec cp {} ts_output/BepInEx/plugins/ \;
 
-        # Copy manifest, changelog, and icon directly from repo
-        cp manifest.json changelog.md icon.png ts_output/
+        # Copy manifest, changelog, readme, and icon directly from repo
+        cp manifest.json CHANGELOG.md README.md icon.png ts_output/
 
         # Create the Thunderstore zip
         cd ts_output
