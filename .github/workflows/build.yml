@@ -1,9 +1,7 @@
-name: Build REPOWebListener
+name: Build and Package REPOWebListener
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -11,17 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout source (with submodules)
+    - name: Checkout source
       uses: actions/checkout@v4
       with:
         submodules: true
 
-    - name: Setup .NET SDK
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
-    - name: Add NuGet Sources
+    - name: Add NuGet sources
       run: |
         dotnet nuget add source https://nuget.bepinex.dev/v3/index.json --name BepInEx
         dotnet nuget add source https://nuget.windows10ce.com/nuget/v3/index.json --name Windows10CE
@@ -29,26 +27,48 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build REPOWebListener.dll
+    - name: Build DLL
       run: dotnet build --no-restore --configuration Release
+
+    - name: Extract version from manifest.json
+      id: manifest
+      run: |
+        VERSION=$(jq -r .version_number manifest.json)
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Package Thunderstore zip
       run: |
-        mkdir -p ts_output/BepInEx/plugins
+        mkdir -p ts_output
 
-        # Copy the built DLL
-        find . -name "REPOWebListener.dll" -exec cp {} ts_output/BepInEx/plugins/ \;
+        # Find and copy DLL
+        DLL_PATH=$(find . -type f -name "REPOWebListener.dll" | head -n 1)
+        if [ -z "$DLL_PATH" ]; then
+          echo "REPOWebListener.dll not found!" && exit 1
+        fi
+        cp "$DLL_PATH" ts_output/
 
-        # Copy manifest, changelog, readme, and icon directly from repo
+        # Copy required Thunderstore files
         cp manifest.json CHANGELOG.md README.md icon.png ts_output/
 
-        # Create the Thunderstore zip
+        # Create final zip
         cd ts_output
         zip -r ../PencilFoxStudios-REPOWebListener.zip .
         cd ..
 
-    - name: Upload Thunderstore Package
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: Thunderstore-Package
         path: PencilFoxStudios-REPOWebListener.zip
+
+    - name: Create/update GitHub draft release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ steps.manifest.outputs.VERSION }}
+        name: REPOWebListener v${{ steps.manifest.outputs.VERSION }}
+        body_path: CHANGELOG.md
+        draft: true
+        prerelease: false
+        files: PencilFoxStudios-REPOWebListener.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
