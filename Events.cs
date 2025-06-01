@@ -312,7 +312,7 @@ class Events
         { // Spawn a random item
             PossibleGoodActions.Add(new EAction("Spawn Random Item", new List<string>() {
             "<b>%chatter%</b> bought a <b>%0%</b> for <b>%victim%</b>!",
-            "!!! a <b>%0%</b> spawned next to <b>%victim%</b> because of <b>%chatter%</b>"
+            "<b>%victim%</b> recived a <b>%0%</b> from <b>%chatter%</b>"
            }, false, (player) =>
             {
                 if (player == null)
@@ -337,8 +337,8 @@ class Events
         { // Spawn a random item
             PossibleGoodActions.Add(new EAction("Spawn Random Valuable", new List<string>() {
             "<b>%chatter%</b> found a <b>%0%</b> and put it next to <b>%victim%</b>!",
-            "<b>%chatter%</b> became a [[GENEROUS BENIFACTOR]] for <b>%victim%</b> and gave them a <b>%0%</b>",
-            "<b>%chatter%</b> gave <b>%victim%</b> a <b>%0%</b>. May the odds be ever in your favour."
+            "<b>%chatter%</b> threw a <b>%0%</b> and gave them a <b>%0%</b>",
+            "<b>%chatter%</b> gave <b>%victim%</b> a <b>%0%</b>"
            }, false, (player) =>
             {
                 if (player == null)
