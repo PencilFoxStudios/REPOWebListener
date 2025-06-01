@@ -5,6 +5,11 @@ on:
     branches:
       - main
       - prerelease
+  pull_request:
+    branches:
+      - main
+      - prerelease
+    types: [opened, synchronize, reopened]
 jobs:
   build:
     if: contains(github.event.head_commit.message, '[build]')
@@ -80,7 +85,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Comment artifact link on PR
-        if: github.event_name == 'push' && github.event.pull_request.number != '' # <-- only run on PR push
+        if: github.event_name == 'pull_request'
+        # <-- only run on PR push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_ID: ${{ github.run_id }}
