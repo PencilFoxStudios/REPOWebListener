@@ -81,10 +81,8 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact_url }}
         run: |
-          # Construct the artifact URL for this workflow run
-          ARTIFACT_URL="https://github.com/${REPO}/suites/${RUN_ID}/artifacts"
-
           # Prepare the comment body
           COMMENT_BODY="🦊🤖 r2modman/thunderstore ZIP is ready to test! [Workflow Run #$RUN_ID]($ARTIFACT_URL)"
 
