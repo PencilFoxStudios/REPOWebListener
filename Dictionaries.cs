@@ -5,7 +5,8 @@ namespace RepoWebListener;
 public class Dictionaries
 {
  public static readonly Dictionary<string, string> ItemPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-{
+{   {"Item Cart Cannon", "items/Item Cart Cannon"},
+    {"Item Cart Laser", "items/Item Cart Laser"},
     {"Item Cart Medium", "items/Item Cart Medium"},
     {"Item Cart Small", "items/Item Cart Small"},
     {"Item Drone Battery", "items/Item Drone Battery"},
@@ -35,7 +36,10 @@ public class Dictionaries
     {"Mine Stun", "items/Item Mine Stun"},
     {"Item Orb Zero Gravity", "items/Item Orb Zero Gravity"},
     {"Item Power Crystal", "items/Item Power Crystal"},
-    {"Item Rubber Duck", "items/Item Rubber Duck"},
+    {"Item Duck Bucket", "items/Item Duck Bucket"},    
+    {"Item Stun Baton", "items/Item Stun Baton"},
+    {"Item Phase Bridge", "items/Item Phase Bridge"},
+    {"Item Rubber Duck", "items/Item Rubber Duck"},    
     {"Item Upgrade Map Player Count", "items/Item Upgrade Map Player Count"},
     {"Item Upgrade Player Energy", "items/Item Upgrade Player Energy"},
     {"Item Upgrade Player Extra Jump", "items/Item Upgrade Player Extra Jump"},
@@ -46,7 +50,7 @@ public class Dictionaries
     {"Item Upgrade Player Sprint Speed", "items/Item Upgrade Player Sprint Speed"},
     {"Item Upgrade Player Tumble Launch", "items/Item Upgrade Player Tumble Launch"},
     {"Item Upgrade Player Crouch Rest", "items/Item Upgrade Player Crouch Rest"},
-    {"Item Upgrade Player Tumble Wings", "items/Item Upgrade Player Tumble Wings"},      
+    {"Item Upgrade Player Tumble Wings", "items/Item Upgrade Player Tumble Wings"},
     { "Item Valuable Tracker", "items/Item Valuable Tracker"}
 };
 
