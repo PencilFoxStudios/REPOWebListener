@@ -2,9 +2,9 @@ name: Build and Package REPOWebListener
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "prerelease"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "prerelease"]
 jobs:
   build:
     runs-on: ubuntu-latest
