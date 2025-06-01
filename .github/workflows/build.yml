@@ -81,12 +81,10 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          ARTIFACT_URL: ${{ steps.upload.outputs.artifact_url }}
         run: |
-          # Prepare the comment body
-          COMMENT_BODY="🦊🤖 r2modman/thunderstore ZIP is ready to test! [Workflow Run #$RUN_ID]($ARTIFACT_URL)"
+          ARTIFACT_URL="https://github.com/${REPO}/actions/runs/${RUN_ID}"
+          COMMENT_BODY="🦊🤖 r2modman/thunderstore ZIP is ready to test! [Download from GitHub Actions](${ARTIFACT_URL})"
 
-          # Post comment on the PR using GitHub API
           curl -s -H "Authorization: token $GITHUB_TOKEN" \
               -H "Content-Type: application/json" \
               -X POST \
