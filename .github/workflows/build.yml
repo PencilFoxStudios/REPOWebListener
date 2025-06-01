@@ -86,7 +86,7 @@ jobs:
           ARTIFACT_URL="https://github.com/${REPO}/suites/${RUN_ID}/artifacts"
 
           # Prepare the comment body
-          COMMENT_BODY="🦊🤖 r2modman/thunderstore ZIP is ready to test! [${${{github.run_id}}}](${ARTIFACT_URL})"
+          COMMENT_BODY="🦊🤖 r2modman/thunderstore ZIP is ready to test! [Workflow Run #$RUN_ID]($ARTIFACT_URL)"
 
           # Post comment on the PR using GitHub API
           curl -s -H "Authorization: token $GITHUB_TOKEN" \
