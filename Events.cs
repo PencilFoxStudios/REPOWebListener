@@ -162,6 +162,8 @@ class Events
             "<b>%chatter%</b> throws a rock at <b>%victim%</b> for <b>-%0%</b> HP!",
             "<b>%victim%</b> couldn't avoid <b>%chatter%</b>'s Ford F150 and took <b>-%0%</b> HP!",
             "<b>%chatter%</b> wanted to play catch with <b>%victim%</b>, but threw the ball too hard and hit them for <b>-%0%</b> HP!",
+            "<b>%victim%</b> caught a stray from <b>%chatter%</b> and took <b>%0%</b> Health in emotional damage!",
+            "<b>%victim%</b> took -%0% damage because <b>%chatter%</b> tripped them over!"
              }, false, (player) =>
         {
             if (player == null)
@@ -194,6 +196,7 @@ class Events
             "<b>%chatter%</b> threw a grenade and hurt everyone, with <b>%0%</b> getting hurt the most for <b>-%1%</b> HP!",
             "<b>%chatter%</b> bombed the whole facility, with <b>%0%</b> getting hurt the most for <b>-%1%</b> HP!",
             "Everyone lost a lot of health because of <b>%chatter%</b>, but <b>%0%</b> lost the most with <b>-%1%</b> HP!",
+            
             }, true, (_) =>
             {
                 PlayerAvatar playerWithMostDamage = null;
@@ -239,7 +242,9 @@ class Events
             "<b>%chatter%</b> summoned a <b>%0%</b> to attack <b>%victim%</b>!",
             "<b>%chatter%</b> called for help and a <b>%0%</b> appeared!",
             "<b>%chatter%</b> told a <b>%0%</b> that <b>%victim%</b> said something bad their mom!",
-            "<b>%chatter%</b> threw a rock at a <b>%0%</b> and it thought <b>%victim%</b> did it!" }, false, (player) =>
+            "<b>%chatter%</b> threw a rock at a <b>%0%</b> and it thought <b>%victim%</b> did it!",
+            "<b>%chatter%</b> ran /execute at <b>%victim%</b> run summon <b>%0%</b>!"
+             }, false, (player) =>
             {
                 string randomEnemy = RepoWebListener.AllowedEnemies.Keys.ElementAt(Randomizer.Next(RepoWebListener.AllowedEnemies.Count));
                 EnemySetup enemySetup = RepoWebListener.AllowedEnemies[randomEnemy];
@@ -290,6 +295,8 @@ class Events
             PossibleGoodActions.Add(new EAction("Heal Specific", new List<string>() {
             "<b>%chatter%</b> healed <b>%victim%</b> for +<b>%0%</b> HP!",
             "<b>%chatter%</b> used a health pack on <b>%victim%</b> for +<b>%0%</b> HP!",
+            "<b>%chatter%</b> gave <b>%victim%</b> a small kiss on the forehead and healed them for +<b>%0%</b> HP!",
+            "<b>%chatter%</b> put a bandaid on <b>%victim%</b> and healed them for  +<b>%0%</b> Health!",
             }, false, (player) =>
             {
                 if (player == null)
@@ -305,6 +312,7 @@ class Events
         { // Spawn a random item
             PossibleGoodActions.Add(new EAction("Spawn Random Item", new List<string>() {
             "<b>%chatter%</b> bought a <b>%0%</b> for <b>%victim%</b>!",
+            "<b>%victim%</b> recived a <b>%0%</b> from <b>%chatter%</b>"
            }, false, (player) =>
             {
                 if (player == null)
@@ -329,6 +337,8 @@ class Events
         { // Spawn a random item
             PossibleGoodActions.Add(new EAction("Spawn Random Valuable", new List<string>() {
             "<b>%chatter%</b> found a <b>%0%</b> and put it next to <b>%victim%</b>!",
+            "<b>%chatter%</b> threw a <b>%0%</b> and gave them a <b>%0%</b>",
+            "<b>%chatter%</b> gave <b>%victim%</b> a <b>%0%</b>"
            }, false, (player) =>
             {
                 if (player == null)
