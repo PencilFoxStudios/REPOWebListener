@@ -24,13 +24,16 @@ class PencilUtils
                 RunManager.instance.levelMainMenu,
                 RunManager.instance.levelRecording
             };
-        if (!PencilConfig.EnabledInShopLevel)
+        if (!PencilConfig.EnabledInShopLevel && RunManager.instance.levelIsShop)
         {
-            blacklist.Add(RunManager.instance.levelShop);
+            return true;
         }
         if (!PencilConfig.EnabledInArenaLevel)
         {
-            blacklist.Add(RunManager.instance.levelArena);
+            foreach (var t in RunManager.instance.levelArena)
+            {
+                blacklist.Add(t);
+            }
         }
         return blacklist.Contains(RunManager.instance.levelCurrent);
     }

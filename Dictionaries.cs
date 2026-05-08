@@ -1,9 +1,36 @@
 using System;
 using System.Collections.Generic;
-namespace RepoWebListener;
+using Unity.VisualScripting;
 
-public class Dictionaries
+namespace RepoWebListener;
+using REPOLib.Objects.Sdk;
+public static class Dictionaries
 {
+    public static bool itemPathsGenerated = false;
+    public static Dictionary<string, string> itemPaths = new Dictionary<string, string>();
+    public static bool valuablePathsGenerated = false;
+    public static Dictionary<string, string> valuablePaths = new Dictionary<string, string>();
+    public static bool enemyPathsGenerated = false;
+    public static Dictionary<string, string> enemyPaths  = new Dictionary<string, string>();
+    public static Dictionary<string,string> getItemPaths()
+    {
+        if (itemPathsGenerated)
+        {
+            return itemPaths;
+        }
+        Dictionary<string, string> paths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        RepoWebListener.Logger.LogDebug($"Asking REPOLib for item list...");
+        foreach (var item in REPOLib.Modules.Items.AllItems)
+        {
+            RepoWebListener.Logger.LogDebug($"Adding path {item.name} at {item.prefab.resourcePath}");
+            paths.Add(item.name, item.prefab.resourcePath);
+        }
+
+        itemPathsGenerated = true;
+        itemPaths = paths;
+        return paths;
+    }
+    // @deprecated
  public static readonly Dictionary<string, string> ItemPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
 {
     {"Item Cart Medium", "items/Item Cart Medium"},

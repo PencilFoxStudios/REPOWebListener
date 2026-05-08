@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using static RepoWebListener.PencilUtils;
 namespace RepoWebListener;
 
-[BepInPlugin("PencilFoxStudios.RepoWebListener", "RepoWebListener", "1.0.7")]
+[BepInPlugin("PencilFoxStudios.RepoWebListener", "RepoWebListener", "1.1.0")]
 [BepInDependency(REPOLib.MyPluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
 public class RepoWebListener : BaseUnityPlugin
 {
@@ -29,6 +30,7 @@ public class RepoWebListener : BaseUnityPlugin
 
     private void Awake()
     {
+        
         Instance = this;
         this.gameObject.transform.parent = null;
         this.gameObject.hideFlags = HideFlags.HideAndDontSave;
@@ -71,7 +73,7 @@ public class RepoWebListener : BaseUnityPlugin
             !SemiFunc.IsMultiplayer() ||
              IsBlacklistedLevel() // Check if the current level is blacklisted
             || (LevelGenerator.Instance.Generated == false) // Check if the level is generated
-            || (!((RunManager.instance.levelArena == RunManager.instance.levelCurrent) && PencilConfig.EnabledInArenaLevel) && (RoundDirector.instance.extractionPointsCompleted == 0 && !RoundDirector.instance.extractionPointActive))
+            || (!(RunManager.instance.levelArena.Find((level)=> level.name == RunManager.instance.levelCurrent.name)&& PencilConfig.EnabledInArenaLevel) && (RoundDirector.instance.extractionPointsCompleted == 0 && !RoundDirector.instance.extractionPointActive))
             // Check if the players haven't left truck yet
             )
             {
@@ -133,28 +135,33 @@ public class RepoWebListener : BaseUnityPlugin
     {
         HttpListenerRequest request = context.Request;
         Logger.LogInfo($"Received {request.HttpMethod} request");
+    
+        string path = request.Url.AbsolutePath;
+        Dictionaries.getItemPaths();
 
-
-        // GET Request
         if (request.HttpMethod == "GET")
         {
-            // get ?username=chatter parameter
-            string requestBody = request.QueryString["username"];
-            // Respond back
-            HttpListenerResponse response = context.Response;
-            string responseString = Events.AddEventToQueueFrom(requestBody);
-            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-            response.OutputStream.Close();
-            Logger.LogInfo($"Chatters in queue: {Events.EventQueue.Count}");
+            if (path == "/random")
+            {
+                string requestBody = request.QueryString["username"];
+                HttpListenerResponse response = context.Response;
+                string responseString = Events.AddEventToQueueFrom(requestBody);
+                byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+            
+                response.ContentLength64 = buffer.Length;
+                response.OutputStream.Write(buffer, 0, buffer.Length);
+                response.OutputStream.Close(); // Response is now DISPOSED
+            
+                Logger.LogInfo($"Chatters in queue: {Events.EventQueue.Count}");
+                return; 
+            }
         }
-        else
-        {
-            context.Response.StatusCode = 405;
-            context.Response.Close();
-        }
+
+        // This part should only run if the request wasn't handled above
+        context.Response.StatusCode = 405;
+        context.Response.Close();
     }
+
     private void Update()
     {
         // Code that runs every frame goes here

@@ -7,7 +7,9 @@ namespace RepoWebListener;
 class RepoWebListenerConfigActivator
 {
     // We define our config variables in a public scope
-
+    private readonly ConfigEntry<bool> debugLogging;
+    public bool  DebugLogging => debugLogging.Value;
+    
     readonly ConfigEntry<int> webServerListenPort;
     public int WebServerListenPort => webServerListenPort.Value;
     readonly ConfigEntry<string> webServerListenIP;
@@ -97,6 +99,13 @@ class RepoWebListenerConfigActivator
 
     public RepoWebListenerConfigActivator(ConfigFile cfg)
     {
+        // Debug Logging
+        debugLogging = cfg.Bind(
+            "Debug Logging",
+            "DebugLogging",
+            false,
+            "Enable debug logging in the console."
+        );
         // Web Server 
         webServerEnabled = cfg.Bind(
             "Web Server",                        // Config section
@@ -421,31 +430,33 @@ class RepoWebListenerConfigActivator
             // Default value
             true,
             // Description
-            "Should spawning a random item near a random player be a possible event?\nSetting this to false will ignore all below events starting with GoodEventSpawnItem"
+            "Should spawning a random item near a random player be a possible event?"
         );
-        bool atLeastOneItemInWhitelist = false;
-        foreach (var pair in Dictionaries.ItemPaths)
-        {
-            WhitelistedItems[pair.Key] = cfg.Bind(
-                // Config section
-                "Good Events.Item Spawning",
-                // Key of this config
-                "GoodEventSpawn" + pair.Key,
-                // Default value
-                true,
-                // Description
-                $"Should a \"{pair.Key.Replace("Item", "")}\" item be possible for GoodEventSpawnRandomItem?"
-            );
-            if (WhitelistedItems[pair.Key].Value)
-            {
-                atLeastOneItemInWhitelist = true;
-            }
-        }
-        if (!atLeastOneItemInWhitelist)
-        {
-            goodEventSpawnRandomItem.Value = false;
-            RepoWebListener.Logger.LogWarning("All items are disabled. Assuming GoodEventSpawnRandomItem config entry to false.");
-        }
+        // bool atLeastOneItemInWhitelist = false;
+        // This is no longer possible as a config option because we are sick of adding new references whenever new content appears.
+        // This will now depend on RepoLib's Registry.
+        // foreach (var pair in Dictionaries.ItemPaths)
+        // {
+        //     WhitelistedItems[pair.Key] = cfg.Bind(
+        //         // Config section
+        //         "Good Events.Item Spawning",
+        //         // Key of this config
+        //         "GoodEventSpawn" + pair.Key,
+        //         // Default value
+        //         true,
+        //         // Description
+        //         $"Should a \"{pair.Key.Replace("Item", "")}\" item be possible for GoodEventSpawnRandomItem?"
+        //     );
+        //     if (WhitelistedItems[pair.Key].Value)
+        //     {
+        //         atLeastOneItemInWhitelist = true;
+        //     }
+        // }
+        // if (!atLeastOneItemInWhitelist)
+        // {
+        //     goodEventSpawnRandomItem.Value = false;
+        //     RepoWebListener.Logger.LogWarning("All items are disabled. Assuming GoodEventSpawnRandomItem config entry to false.");
+        // }
         // Good Valuable Spawning Events
         goodEventSpawnRandomValuable = cfg.Bind(
             // Config section
@@ -455,32 +466,32 @@ class RepoWebListenerConfigActivator
             // Default value
             true,
             // Description
-            "Should spawning a random Valuable be a possible event?\nSetting this to false will ignore all below events starting with GoodEventSpawnValuable."
+            "Should spawning a random Valuable be a possible event?"
         );
 
-        bool atLeastOneValuableInWhitelist = false;
-        foreach (var pair in Dictionaries.ValuablePaths)
-        {
-            WhitelistedValuables[pair.Key] = cfg.Bind(
-                // Config section
-                "Good Events.Valuable Spawning",
-                // Key of this config
-                "GoodEventSpawn" + pair.Key,
-                // Default value
-                true,
-                // Description
-                $"Should a \"{pair.Key.Replace("Valuable", "")}\" valuable be possible for GoodEventSpawnRandomValuable?"
-            );
-            if (WhitelistedValuables[pair.Key].Value)
-            {
-                atLeastOneValuableInWhitelist = true;
-            }
-        }
-        if (!atLeastOneValuableInWhitelist)
-        {
-            goodEventSpawnRandomValuable.Value = false;
-            RepoWebListener.Logger.LogWarning("All valuables are disabled. Assuming GoodEventSpawnRandomValuable config entry to false.");
-        }
+        // bool atLeastOneValuableInWhitelist = false;
+        // foreach (var pair in Dictionaries.ValuablePaths)
+        // {
+        //     WhitelistedValuables[pair.Key] = cfg.Bind(
+        //         // Config section
+        //         "Good Events.Valuable Spawning",
+        //         // Key of this config
+        //         "GoodEventSpawn" + pair.Key,
+        //         // Default value
+        //         true,
+        //         // Description
+        //         $"Should a \"{pair.Key.Replace("Valuable", "")}\" valuable be possible for GoodEventSpawnRandomValuable?"
+        //     );
+        //     if (WhitelistedValuables[pair.Key].Value)
+        //     {
+        //         atLeastOneValuableInWhitelist = true;
+        //     }
+        // }
+        // if (!atLeastOneValuableInWhitelist)
+        // {
+        //     goodEventSpawnRandomValuable.Value = false;
+        //     RepoWebListener.Logger.LogWarning("All valuables are disabled. Assuming GoodEventSpawnRandomValuable config entry to false.");
+        // }
         bool shouldKeepGoodEventsEnabled = GoodThings && (
             GoodEventHealAll ||
         GoodEventHealSpecific ||
@@ -576,36 +587,36 @@ class RepoWebListenerConfigActivator
             // Default value
             true,
             // Description
-            "Should spawning a random enemy near a random player be a possible event?\nSetting this to false will ignore all below events starting with BadEventSpawnEnemy."
+            "Should spawning a random enemy near a random player be a possible event?"
         );
-        bool atLeastOneEnemyInWhitelist = false;
-        foreach (var pair in Dictionaries.EnemyPaths)
-        {
-            WhitelistedEnemies[pair.Key] = cfg.Bind(
-                // Config section
-                "Bad Events.Enemy Spawning",
-                // Key of this config
-                "BadEventSpawn" + pair.Key,
-                // Default value
-                true,
-                // Description
-                $"Should a \"{pair.Key.Replace("Enemy", "")}\" enemy be possible for BadEventSpawnRandomEnemy?"
-            );
-            if (WhitelistedEnemies[pair.Key].Value)
-            {
-                atLeastOneEnemyInWhitelist = true;
-            }
-        }
-        if (!atLeastOneEnemyInWhitelist)
-        {
-            badEventSpawnRandomEnemy.Value = false;
-            RepoWebListener.Logger.LogWarning("All enemies are disabled. Assuming BadEventSpawnRandomEnemy config entry to false.");
-        }
-        else
-        {
-            // If at least one enemy is enabled, we need to make sure that the bad event is enabled
-            badEventSpawnRandomEnemy.Value = true;
-        }
+        // bool atLeastOneEnemyInWhitelist = false;
+        // foreach (var pair in Dictionaries.EnemyPaths)
+        // {
+        //     WhitelistedEnemies[pair.Key] = cfg.Bind(
+        //         // Config section
+        //         "Bad Events.Enemy Spawning",
+        //         // Key of this config
+        //         "BadEventSpawn" + pair.Key,
+        //         // Default value
+        //         true,
+        //         // Description
+        //         $"Should a \"{pair.Key.Replace("Enemy", "")}\" enemy be possible for BadEventSpawnRandomEnemy?"
+        //     );
+        //     if (WhitelistedEnemies[pair.Key].Value)
+        //     {
+        //         atLeastOneEnemyInWhitelist = true;
+        //     }
+        // }
+        // if (!atLeastOneEnemyInWhitelist)
+        // {
+        //     badEventSpawnRandomEnemy.Value = false;
+        //     RepoWebListener.Logger.LogWarning("All enemies are disabled. Assuming BadEventSpawnRandomEnemy config entry to false.");
+        // }
+        // else
+        // {
+        //     // If at least one enemy is enabled, we need to make sure that the bad event is enabled
+        //     badEventSpawnRandomEnemy.Value = true;
+        // }
         bool shouldKeepBadEventsEnabled = BadThings && (
             BadEventDamageAll ||
             BadEventDamageSpecific ||

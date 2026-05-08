@@ -6,7 +6,7 @@ I originally created this for use with my Twitch streams + MixItUp to make event
 Check out the config file it generates for options!
 
 ## Trigger
-Any GET request to the endpoint hosted by this mod (``http://localhost:7390?username=<optional_reason_for_event>`` by default) will trigger one of the following events at random. You can turn each one on or off in the configuration.
+Any GET request to the (currently only) one endpoint hosted by this mod (``http://localhost:7390/random?username=<optional_reason_for_event>``) will trigger one of the following events at random. You can turn each one on or off in the configuration.
 
 ## Deciding the Event
 The event that is triggered is first decided by a 50/50 coin flip of good or bad. If the event is good, it will then randomly select one of the good events. If the event is bad, it will randomly select one of the bad events.
@@ -47,4 +47,4 @@ ___
 There is much more to come! If you have any suggestions, feel free to reach out to me on [Discord](https://discord.gg/yip)!
 <sub>Logo by [N3onAssassin](https://bsky.app/profile/n3onassassin.bsky.social)</sub>
 <br>
-<sub>© Pencil Fox Studios SP</sub>
+<sub>© Pencil Fox, LLC</sub>
